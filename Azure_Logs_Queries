@@ -1,5 +1,22 @@
 Query1 -> SecurityAlert | where ProviderName == 'ASI Scheduled Alerts' or ProviderName == 'CustomAlertRule' // To check the alerts
 
-Query2 -> SecurityAlert | where SystemAlertId == '7420a16b-e66b-5583-9554-21c828ad8197' // To check the Alert using SystemAlertId
+Query2 -> SecurityAlert | where SystemAlertId == 'AlertID' // To check the Alert using SystemAlertId
 
 Query3 -> 
+//This alert was created with the "Generate an alert for each query result" option. To filter the specific query result, a filter was added to the end of the query.
+// Time scope parameters (in UTC format) were prepended to the query to reflect the time window on which the scheduled analytics rule ran when the alert was triggered.
+// To change the time scope, remove the set statements and select a new time range.
+set query_datetimescope_column = "TimeGenerated";                            // Time Scope 
+set query_datetimescope_from = datetime(2020-11-20T17:52:48.5858398Z);
+set query_datetimescope_to = datetime(2020-11-20T18:52:48.5858398Z);
+set query_now = datetime(2020-11-20T18:52:48.5858398Z);
+let timeframe = 1h;
+AWSCloudTrail
+| where TimeGenerated > ago(timeframe)
+| where EventName =~ "ConsoleLogin" 
+| extend MFAUsed = tostring(parse_json(AdditionalEventData).MFAUsed), LoginResult = tostring(parse_json(ResponseElements).ConsoleLogin)
+| where MFAUsed !~ "Yes" and LoginResult !~ "Failure"
+| summarize StartTimeUtc = min(TimeGenerated), EndTimeUtc = max(TimeGenerated) by EventName, EventTypeName, LoginResult, MFAUsed, UserIdentityAccountId,  UserIdentityPrincipalid, UserAgent, 
+UserIdentityUserName, SessionMfaAuthenticated, SourceIpAddress, AWSRegion
+| extend timestamp = StartTimeUtc, AccountCustomEntity = UserIdentityUserName, IPCustomEntity = SourceIpAddress
+| where hash_sha256(dynamic_to_json(pack_all())) == "ID"
