@@ -1,0 +1,5 @@
+Query1 -> SecurityAlert | where ProviderName == 'ASI Scheduled Alerts' or ProviderName == 'CustomAlertRule' // To check the alerts
+
+Query2 -> SecurityAlert | where SystemAlertId == '7420a16b-e66b-5583-9554-21c828ad8197' // To check the Alert using SystemAlertId
+
+Query3 -> 
