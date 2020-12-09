@@ -20,3 +20,5 @@ AWSCloudTrail
 UserIdentityUserName, SessionMfaAuthenticated, SourceIpAddress, AWSRegion
 | extend timestamp = StartTimeUtc, AccountCustomEntity = UserIdentityUserName, IPCustomEntity = SourceIpAddress
 | where hash_sha256(dynamic_to_json(pack_all())) == "ID"
+
+Query4 -> SecurityAlert | summarize arg_max(TimeGenerated, *) by SystemAlertId | where SystemAlertId in("ID")  // Punnets cmd 
