@@ -25,7 +25,7 @@ Query4 -> SecurityAlert | summarize arg_max(TimeGenerated, *) by SystemAlertId |
 
 Query5 -> SecurityAlert
 | summarize arg_max(TimeGenerated, *) by SystemAlertId
-| where SystemAlertId in("1d0b2d52-8352-8944-efdc-e6dc11eee923", "858d8bd1-1e9f-241d-d442-f9f888c4ee2d")
+| where SystemAlertId in("ID", "ID")
 | project SystemAlertId, Entities 
 | extend Entities = iff(isempty(Entities), todynamic('[{"dummy" : ""}]'), todynamic(Entities)) 
 | mvexpand Entities
