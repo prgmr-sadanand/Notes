@@ -32,3 +32,5 @@ Query5 -> SecurityAlert
 | evaluate bag_unpack(Entities)
 | extend Type = columnifexists("Type", "")  // Check its purpose
 
+Query6 -> SecurityAlert | summarize arg_max(TimeGenerated, *) by SystemAlertId | where SystemAlertId in("ID","ID") | where AlertName == 'New account created'
+
