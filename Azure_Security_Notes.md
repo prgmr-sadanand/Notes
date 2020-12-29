@@ -4,4 +4,4 @@ Security Center Provides recommendations to protect the environment.
 
 It can also install agents on ur on-premise virtual to extend the functionality of Security Center to protect ur Hybrid Envn.
 
-https://github.com/prgmr-sadanand/Notes/issues/2#issue-775796816
+;  https://github.com/prgmr-sadanand/Notes/issues/2#issue-775796816
